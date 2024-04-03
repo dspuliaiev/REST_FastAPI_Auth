@@ -5,15 +5,15 @@ from src.conf.config import config
 
 class DataBaseSessionManager:
     def __init__(self, url: str):
-        self._engine: AsyncEngine | None = create_async_engine(url, echo=False)  # Создание движка
+        self._engine: AsyncEngine | None = create_async_engine(url, echo=False)
         self._session_maker: async_sessionmaker = async_sessionmaker(autocommit=False, autoflush=False,
                                                                      bind=self._engine)  # Фабрика сессий
 
-    @asynccontextmanager  # декоратор, который превращает функцию в менеджер контекста
+    @asynccontextmanager
     async def session(self):
-        if self._session_maker is None:  # проверка, что фабрика сессий была инициализирована.
+        if self._session_maker is None:
             raise Exception("Session is not initialized")
-        session = self._session_maker()  # Создание новой сесии БД
+        session = self._session_maker()
         try:
             yield session
         except Exception as e:
